@@ -81,7 +81,7 @@ public class RecaudacionTest {
 	public void testFindByGivenCompanyName() throws IOException, NoSuchEntryException {
 		Map<String, String> options = new HashMap<String, String>();
 		options.put("company_name", "Facebook");
-		Map<String, String> row = Recaudacion.findBy(options);
+		Map<String, String> row = recaudacion.findBy(options);
 
 		assertEquals(row.get("permalink"), "facebook");
 		assertEquals(row.get("company_name"), "Facebook");
@@ -98,7 +98,7 @@ public class RecaudacionTest {
 	public void testFindByGivenState() throws IOException, NoSuchEntryException {
 		Map<String, String> options = new HashMap<String, String>();
 		options.put("state", "CA");
-		Map<String, String> row = Recaudacion.findBy(options);
+		Map<String, String> row = recaudacion.findBy(options);
 
 		assertEquals(row.get("permalink"), "digg");
 		assertEquals(row.get("company_name"), "Digg");
@@ -116,7 +116,7 @@ public class RecaudacionTest {
 		Map<String, String> options = new HashMap<String, String>();
 		options.put("company_name", "Facebook");
 		options.put("round", "c");
-		Map<String, String> row = Recaudacion.findBy(options);
+		Map<String, String> row = recaudacion.findBy(options);
 
 		assertEquals(row.get("permalink"), "facebook");
 		assertEquals(row.get("company_name"), "Facebook");
@@ -135,7 +135,7 @@ public class RecaudacionTest {
 		options.put("company_name", "NotFacebook");
 		options.put("round", "c");
 		try {
-			Map<String, String> row = Recaudacion.findBy(options);
+			Map<String, String> row = recaudacion.findBy(options);
 			Assert.fail("findBy should throw exception");
 		} catch (NoSuchEntryException e) {
 			// Esta bien que salga por el catch

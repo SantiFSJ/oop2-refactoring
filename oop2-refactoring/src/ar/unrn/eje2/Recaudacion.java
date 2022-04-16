@@ -18,49 +18,17 @@ public class Recaudacion {
 
 		List<String[]> csvData = datos.leerArchivo();
 
-		if (options.containsKey("company_name")) {
-			List<String[]> results = new ArrayList<String[]>();
+		if (options.containsKey("company_name"))
+			csvData = obtenerDatosPorLlave(options, csvData, "company_name", 1);
 
-			for (int i = 0; i < csvData.size(); i++) {
-				if (csvData.get(i)[1].equals(options.get("company_name"))) {
-					results.add(csvData.get(i));
-				}
-			}
-			csvData = results;
-		}
+		if (options.containsKey("city"))
+			csvData = obtenerDatosPorLlave(options, csvData, "city", 4);
 
-		if (options.containsKey("city")) {
-			List<String[]> results = new ArrayList<String[]>();
+		if (options.containsKey("state"))
+			csvData = obtenerDatosPorLlave(options, csvData, "state", 5);
 
-			for (int i = 0; i < csvData.size(); i++) {
-				if (csvData.get(i)[4].equals(options.get("city"))) {
-					results.add(csvData.get(i));
-				}
-			}
-			csvData = results;
-		}
-
-		if (options.containsKey("state")) {
-			List<String[]> results = new ArrayList<String[]>();
-
-			for (int i = 0; i < csvData.size(); i++) {
-				if (csvData.get(i)[5].equals(options.get("state"))) {
-					results.add(csvData.get(i));
-				}
-			}
-			csvData = results;
-		}
-
-		if (options.containsKey("round")) {
-			List<String[]> results = new ArrayList<String[]>();
-
-			for (int i = 0; i < csvData.size(); i++) {
-				if (csvData.get(i)[9].equals(options.get("round"))) {
-					results.add(csvData.get(i));
-				}
-			}
-			csvData = results;
-		}
+		if (options.containsKey("round"))
+			csvData = obtenerDatosPorLlave(options, csvData, "round", 9);
 
 		List<Map<String, String>> output = new ArrayList<Map<String, String>>();
 
@@ -71,9 +39,40 @@ public class Recaudacion {
 		}
 
 		return output;
+
 	}
 
-	public static void mapear(Map<String, String> mapped, List<String[]> csvData, int indice) {
+	private List<String[]> obtenerDatosPorLlave(Map<String, String> options, List<String[]> csvData,
+			String nombreColumna, int columna) throws IOException {
+		/*
+		 * List<String[]> results = new ArrayList<String[]>();
+		 * 
+		 * 
+		 * for (int i = 0; i < csvData.size(); i++) {
+		 * 
+		 * if (csvData.get(i)[4].equals(options.get(nombreColumna))) {
+		 * results.add(csvData.get(i)); }
+		 * 
+		 * } csvData = results; return csvData;
+		 */
+		List<String[]> results = new ArrayList<String[]>();
+		String nombreLlave = datos.leerArchivo().get(0)[columna]; // No se me ocurre como quitar los puntos
+
+		for (int i = 0; i < csvData.size(); i++) {
+			results = compararDatos(results, csvData, csvData.get(i)[columna], options.get(nombreLlave), i);
+		}
+		return results;
+	}
+
+	private List<String[]> compararDatos(List<String[]> results, List<String[]> csvData, String datoArchivo,
+			String datoLlave, int indice) {
+
+		if (datoArchivo.equals(datoLlave))
+			results.add(csvData.get(indice));
+		return results;
+	}
+
+	private static void mapear(Map<String, String> mapped, List<String[]> csvData, int indice) {
 		mapped.put("permalink", csvData.get(indice)[0]);
 		mapped.put("company_name", csvData.get(indice)[1]);
 		mapped.put("number_employees", csvData.get(indice)[2]);
@@ -87,7 +86,7 @@ public class Recaudacion {
 
 	}
 
-	public static Map<String, String> findBy(Map<String, String> options) throws IOException, NoSuchEntryException {
+	public Map<String, String> findBy(Map<String, String> options) throws IOException, NoSuchEntryException {
 		List<String[]> csvData = datos.leerArchivo();
 
 		Map<String, String> mapped = new HashMap<String, String>();

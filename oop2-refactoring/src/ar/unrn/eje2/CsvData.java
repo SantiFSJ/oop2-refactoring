@@ -20,7 +20,7 @@ public class CsvData implements Datos {
 		}
 
 		reader.close();
-		csvData.remove(0);
+		// csvData.remove(0);
 
 		return csvData;
 
