@@ -10,7 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class RecaudacionTest {
-	Datos csvData = new CsvData();
+	Datos csvData = new DatosCsv();
 	Recaudacion recaudacion = new Recaudacion(csvData);
 
 	@Test

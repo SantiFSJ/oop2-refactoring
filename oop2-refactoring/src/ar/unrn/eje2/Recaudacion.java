@@ -133,7 +133,7 @@ public class Recaudacion {
 	public static void main(String[] args) {
 		try {
 
-			Datos datos = new CsvData();
+			Datos datos = new DatosCsv();
 			Recaudacion r = new Recaudacion(datos);
 			Map<String, String> options = new HashMap<String, String>();
 			options.put("company_name", "Facebook");

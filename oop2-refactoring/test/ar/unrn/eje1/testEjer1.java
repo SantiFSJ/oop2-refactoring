@@ -1,4 +1,4 @@
-package ar.unrn.eje2;
+package ar.unrn.eje1;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

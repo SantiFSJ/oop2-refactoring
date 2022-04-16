@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.opencsv.CSVReader;
 
-public class CsvData implements Datos {
+public class DatosCsv implements Datos {
 
 	@Override
 	public List<String[]> leerArchivo() throws IOException {

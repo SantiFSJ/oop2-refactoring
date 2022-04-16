@@ -3,49 +3,30 @@ package ar.unrn.eje3;
 import java.time.LocalDate;
 import java.util.List;
 
-enum TipoDeGasto {
-  CENA, DESAYUNO, ALQUILER_AUTO
-}
-
-class Gasto {
-  TipoDeGasto tipoGasto;
-  int monto;
-}
-
 public class ReporteDeGastos {
-  public void imprimir(List<Gasto> gastos) {
-    int total = 0;
-    int gastosDeComida = 0;
+	private Gastos gastos;
 
-    System.out.println("Expenses " + LocalDate.now());
+	public ReporteDeGastos(List<Gasto> gastos) {
+		this.gastos = new Gastos(gastos);
+	}
 
-    for (Gasto gasto : gastos) {
-      if (gasto.tipoGasto == TipoDeGasto.CENA || gasto.tipoGasto == TipoDeGasto.DESAYUNO) {
-        gastosDeComida += gasto.monto;
-      }
+	public int montoTotalComida() {
+		return gastos.montoComidas();
+	}
 
-      String nombreGasto = "";
-      switch (gasto.tipoGasto) {
-      case CENA:
-        nombreGasto = "Cena";
-        break;
-      case DESAYUNO:
-        nombreGasto = "Desayuno";
-        break;
-      case ALQUILER_AUTO:
-        nombreGasto = "Alquiler de Autos";
-        break;
-      }
+	public int montoTotalGastos() {
+		return gastos.montoTotal();
+	}
 
-      String marcaExcesoComidas = gasto.tipoGasto == TipoDeGasto.CENA && gasto.monto > 5000
-          || gasto.tipoGasto == TipoDeGasto.DESAYUNO && gasto.monto > 1000 ? "X" : " ";
+	public StringBuffer informacionCompleta() {
+		StringBuffer reporte = new StringBuffer();
 
-      System.out.println(nombreGasto + "\t" + gasto.monto + "\t" + marcaExcesoComidas);
+		reporte.append("Expenses " + LocalDate.now() + "\n");
+		reporte.append(this.gastos.informacionGastos() + "\n");
+		reporte.append("Gastos de comida: " + this.gastos.montoComidas() + "\n");
+		reporte.append("Total de gastos: " + this.gastos.montoTotal() + "\n");
 
-      total += gasto.monto;
-    }
+		return reporte;
+	}
 
-    System.out.println("Gastos de comida: " + gastosDeComida);
-    System.out.println("Total de gastos: " + total);
-  }
 }
