@@ -8,27 +8,31 @@ import java.util.Map;
 
 public class Recaudacion {
 
-	public static Datos datos;
+	public Datos datos;
 
 	public Recaudacion(Datos datos) {
 		this.datos = datos;
 	}
 
 	public List<Map<String, String>> where(Map<String, String> options) throws IOException {
-
 		List<String[]> csvData = datos.leerArchivo();
 
 		if (options.containsKey("company_name"))
-			csvData = obtenerDatosPorLlave(options, csvData, "company_name", 1);
+			csvData = obtenerDatos(options, csvData,
+					(i, listaCsv, opcionesMap) -> (listaCsv.get(i)[1].equals(options.get("company_name"))));
 
 		if (options.containsKey("city"))
-			csvData = obtenerDatosPorLlave(options, csvData, "city", 4);
+			csvData = obtenerDatos(options, csvData,
+					(i, listaCsv, opcionesMap) -> (listaCsv.get(i)[4].equals(options.get("city"))));
 
 		if (options.containsKey("state"))
-			csvData = obtenerDatosPorLlave(options, csvData, "state", 5);
+			csvData = obtenerDatos(options, csvData,
+					(i, listaCsv, opcionesMap) -> (listaCsv.get(i)[5].equals(options.get("state"))));
 
 		if (options.containsKey("round"))
-			csvData = obtenerDatosPorLlave(options, csvData, "round", 9);
+
+			csvData = obtenerDatos(options, csvData,
+					(i, listaCsv, opcionesMap) -> (listaCsv.get(i)[9].equals(options.get("round"))));
 
 		List<Map<String, String>> output = new ArrayList<Map<String, String>>();
 
@@ -42,34 +46,14 @@ public class Recaudacion {
 
 	}
 
-	private List<String[]> obtenerDatosPorLlave(Map<String, String> options, List<String[]> csvData,
-			String nombreColumna, int columna) throws IOException {
-		/*
-		 * List<String[]> results = new ArrayList<String[]>();
-		 * 
-		 * 
-		 * for (int i = 0; i < csvData.size(); i++) {
-		 * 
-		 * if (csvData.get(i)[4].equals(options.get(nombreColumna))) {
-		 * results.add(csvData.get(i)); }
-		 * 
-		 * } csvData = results; return csvData;
-		 */
+	private List<String[]> obtenerDatos(Map<String, String> options, List<String[]> csvData, Condicion c) {
 		List<String[]> results = new ArrayList<String[]>();
-		String nombreLlave = datos.leerArchivo().get(0)[columna]; // No se me ocurre como quitar los puntos
-
 		for (int i = 0; i < csvData.size(); i++) {
-			results = compararDatos(results, csvData, csvData.get(i)[columna], options.get(nombreLlave), i);
+			if (c.esIgual(i, csvData, options))
+				results.add(csvData.get(i));
 		}
 		return results;
-	}
 
-	private List<String[]> compararDatos(List<String[]> results, List<String[]> csvData, String datoArchivo,
-			String datoLlave, int indice) {
-
-		if (datoArchivo.equals(datoLlave))
-			results.add(csvData.get(indice));
-		return results;
 	}
 
 	private static void mapear(Map<String, String> mapped, List<String[]> csvData, int indice) {
