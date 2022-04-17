@@ -2,11 +2,11 @@ package arj.unrn.eje3;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
+import ar.unrn.eje3.DateManager;
 import ar.unrn.eje3.Gasto;
 import ar.unrn.eje3.GastoAlquilerAuto;
 import ar.unrn.eje3.GastoCena;
@@ -14,6 +14,9 @@ import ar.unrn.eje3.GastoDesayuno;
 import ar.unrn.eje3.ReporteDeGastos;
 
 public class testEjer3 {
+
+	DateManager gestorFecha = new DateManager();
+
 	@Test
 	public void testMontoTotalComida() {
 		// Set Up
@@ -27,7 +30,7 @@ public class testEjer3 {
 		listaGastos.add(gasto3);
 
 		// Ejercitacion
-		ReporteDeGastos reporte = new ReporteDeGastos(listaGastos);
+		ReporteDeGastos reporte = new ReporteDeGastos(listaGastos, gestorFecha);
 
 		// Verificacion
 		assertEquals(950, reporte.montoTotalComida());
@@ -47,7 +50,7 @@ public class testEjer3 {
 		listaGastos.add(gasto3);
 
 		// Ejercitacion
-		ReporteDeGastos reporte = new ReporteDeGastos(listaGastos);
+		ReporteDeGastos reporte = new ReporteDeGastos(listaGastos, gestorFecha);
 
 		// Verificacion
 		assertEquals(2950, reporte.montoTotalGastos());
@@ -67,17 +70,14 @@ public class testEjer3 {
 		listaGastos.add(gasto3);
 
 		// Ejercitacion
-		ReporteDeGastos reporte = new ReporteDeGastos(listaGastos);
+		ReporteDeGastos reporte = new ReporteDeGastos(listaGastos, gestorFecha);
 
 		// Verificacion
-		System.out.println(reporte.informacionCompleta());
-		StringBuffer infoEsperada = new StringBuffer();
-		infoEsperada.append("Expenses " + LocalDate.now() + "\n");
-		infoEsperada.append("Cena	750\nAlquiler	2000\nDesayuno	200\n");
-		infoEsperada.append("Gastos de comida: " + reporte.montoTotalComida() + "\n");
-		infoEsperada.append("Total de gastos: " + reporte.montoTotalGastos() + "\n");
-
-		assertEquals(infoEsperada, reporte.informacionCompleta());
+		System.out.println(reporte.informacionCompleta().toString());
+		String infoEsperada = "Expenses 2022-04-17" + "Cena	750	 " + "Alquiler	2000	 " + "Desayuno	200	 " + ""
+				+ "Gastos de comida: 950" + "Total de gastos: 2950";
+		// System.out.println(infoEsperada);
+		assertEquals(infoEsperada, reporte.informacionCompleta().toString());
 
 	}
 }
